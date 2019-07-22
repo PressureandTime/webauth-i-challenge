@@ -2,6 +2,9 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const uuid = require('uuid');
+const session = require('express-session');
+
 
 const Users = require('./users/users-model.js');
 
@@ -11,10 +14,27 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
-server.get('/', (req, res) => {
-  res.send('WELCOME!!!!');
-});
 
+server.use(
+  session({
+    genid: req => {
+      console.log('Inside the session middleware');
+      console.log(req.sessionID);
+      return uuid();
+    },
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+
+
+server.get('/', (req, res) => {
+  console.log('Inside the homepage callback function');
+  console.log(req.sessionID);
+  res.send(`Welcome!\n`);
+});
 
 
 server.post('/api/register', (req, res) => {
@@ -49,6 +69,14 @@ server.post('/api/login', (req, res) => {
 });
 
 
+
+server.get('/api/users', (req, res) => {
+  Users.find()
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => res.send(err));
+});
 
 
 const port = process.env.PORT || 5000;
