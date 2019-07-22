@@ -17,5 +17,6 @@ module.exports = {
     'func-names': 0,
     'prefer-arrow-callback': 0,
     'space-before-function-paren': 0,
+    'no-multiple-empty-lines':0,
   },
 };

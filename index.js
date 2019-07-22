@@ -12,9 +12,23 @@ server.use(express.json());
 server.use(cors());
 
 server.get('/', (req, res) => {
-  res.send('WELCOME!');
+  res.send('WELCOME!!!!');
 });
 
+
+
+server.post('/api/register', (req, res) => {
+  const user = req.body;
+  user.password = bcrypt.hashSync(user.password, 12);
+
+  Users.add(user)
+    .then(saved => {
+      res.status(201).json(saved);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
+});
 
 
 
