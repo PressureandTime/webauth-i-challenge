@@ -22,9 +22,9 @@ router.get('/logout', (req, res) => {
   if (req.session) {
     req.session.destroy(err => {
       if (err) {
-        res.send('you can never leave');
+        res.send('you are still logged in, error!');
       } else {
-        res.send('bye, thanks!');
+        res.send('You are logged out!');
       }
     });
   } else {
@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         req.session.user = user;
         res.status(200).json({
-          message: `Welcome ${user.username}!`,
+          message: `Welcome ${user.username}! You are inside`,
         });
       } else {
         res.status(401).json({ message: 'Invalid Credentials' });
